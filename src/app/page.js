@@ -1,8 +1,7 @@
 "use client";
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { products } from '../data'; 
 import Link from 'next/link';
 
 if (typeof window !== "undefined") {
@@ -10,13 +9,39 @@ if (typeof window !== "undefined") {
 }
 
 export default function Home() {
+  // 1. New State for Backend Data and Loading Status
+  const [perfumes, setPerfumes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const titleRef = useRef(null);
   const bgImageRef = useRef(null);
   const heroSectionRef = useRef(null);
   const horizontalSectionRef = useRef(null);
 
+  // 2. Fetch the API data when the component mounts
   useEffect(() => {
-    // 1. Wrap everything in gsap.context() so React stays happy
+    async function loadPerfumes() {
+      try {
+        const res = await fetch('/api/perfumes');
+        if (!res.ok) throw new Error("API not ready");
+        
+        const data = await res.json();
+        setPerfumes(data);
+      } catch (error) {
+        console.error("Failed to fetch from API.", error);
+        setPerfumes([]); // Protects the page from crashing by giving it an empty array
+      } finally {
+        setIsLoading(false); // Tell GSAP it is time to animate!
+      }
+    }
+    loadPerfumes();
+  }, []);
+
+  // 3. GSAP Animations (Now waits for data to load)
+  useEffect(() => {
+    // Crucial: Do not run GSAP until the DOM has the loaded products
+    if (isLoading) return; 
+
     let ctx = gsap.context(() => {
       
       // Initial Load Animation
@@ -41,24 +66,32 @@ export default function Home() {
 
       // HORIZONTAL SCROLL PRODUCT GALLERY
       const sections = gsap.utils.toArray('.product-card');
-      const scrollWidth = "+=" + (sections.length * window.innerWidth * 0.4); 
       
-      gsap.to(sections, {
-        xPercent: -100 * (sections.length - 1),
-        ease: "none",
-        scrollTrigger: {
-          trigger: horizontalSectionRef.current,
-          pin: true,
-          scrub: 1.5,
-          end: scrollWidth,
-        }
-      });
+      // Only create the scroll animation if we actually have products on screen
+      if (sections.length > 0) {
+        const scrollWidth = "+=" + (sections.length * window.innerWidth * 0.4); 
+        
+        gsap.to(sections, {
+          xPercent: -100 * (sections.length - 1),
+          ease: "none",
+          scrollTrigger: {
+            trigger: horizontalSectionRef.current,
+            pin: true,
+            scrub: 1.5,
+            end: scrollWidth,
+          }
+        });
+      }
     });
 
-    // 2. The crucial cleanup function that removes GSAP wrappers before React re-renders
     return () => ctx.revert();
     
-  }, []);
+  }, [isLoading]); // This tells the useEffect to re-run once 'isLoading' turns false
+
+  // Optional: Show a sleek loading state while fetching
+  if (isLoading) {
+    return <div className="h-screen w-full bg-black flex items-center justify-center text-white text-xs tracking-[0.3em] uppercase">Loading Collection...</div>;
+  }
 
   return (
     <div className="flex flex-col relative text-white">
@@ -102,19 +135,21 @@ export default function Home() {
         </div>
 
         <div className="horizontal-container flex w-[400vw] md:w-[150vw] h-[60vh] mt-10 px-[10vw] items-center gap-10 md:gap-20 z-10">
-          {products.map((product) => (
+          {/* We are now mapping over the dynamic 'perfumes' state! */}
+          {perfumes.map((product) => (
             <div key={product.id} className="product-card w-[80vw] md:w-[35vw] h-full flex-shrink-0 relative group cursor-pointer shadow-2xl">
               <div className="w-full h-full overflow-hidden relative border border-white/10 bg-[#0a0a0a]">
                 <img 
-                  src={product.image} 
+                  // Fallback to a placeholder if your API data doesn't have an image field yet
+                  src={product.image || "/image_1.png"} 
                   alt={product.name} 
                   className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-out"
                 />
               </div>
               <div className="absolute bottom-10 left-[-1rem] bg-black/90 backdrop-blur-md p-6 border border-white/10 opacity-0 group-hover:opacity-100 group-hover:left-8 transition-all duration-700 ease-out">
-                <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">{product.category}</p>
+                <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">{product.category || "Luxury"}</p>
                 <h3 className="text-2xl font-serif text-white uppercase tracking-widest">{product.name}</h3>
-                <p className="text-[#d4af37] tracking-[0.2em] text-sm mt-2">{product.price}</p>
+                <p className="text-[#d4af37] tracking-[0.2em] text-sm mt-2">${product.price}</p>
               </div>
             </div>
           ))}

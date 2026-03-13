@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Midnight Oud",
+    "price": 120,
+    "category": "Woody",
+    "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    "id": 2,
+    "name": "Velvet Rose",
+    "price": 95,
+    "category": "Floral",
+    "image": "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    "id": 3,
+    "name": "Citrus Mirage",
+    "price": 85,
+    "category": "Citrus",
+    "image": "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    "id": 4,
+    "name": "Amber Whisper",
+    "price": 110,
+    "category": "Oriental",
+    "image": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    "name": "special one",
+    "price": 200,
+    "category": "Woody",
+    "image": "https://t3.ftcdn.net/jpg/06/20/22/88/360_F_620228881_7XPMX4BLXXjfd33LyA39t5HID14FpfnY.jpg",
+    "id": 1773407584922
+  },
+  {
+    "name": "vanilla",
+    "price": 150,
+    "category": "Oriental",
+    "image": "https://www.westside.com/cdn/shop/files/300990461001_1.jpg?v=1743092457&width=1445",
+    "id": 1773418981221
+  }
+]

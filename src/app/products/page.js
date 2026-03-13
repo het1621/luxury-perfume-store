@@ -1,14 +1,52 @@
 "use client";
-import { useState } from 'react';
-import { products } from '../../data'; // Adjust path if your data.js is elsewhere
-import { ShoppingBag } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ShoppingBag } from 'lucide-react'; // <-- Add this exact line!
 
 export default function ProductsPage() {
-  // Fake state to show clients you can build interactive UI
-  const [activeFilter, setActiveFilter] = useState('All');
-  const filters = ['All', 'Woody', 'Floral', 'Citrus', 'Oriental'];
+// ... the rest of your code stays exactly the same
+  // 1. The State Hooks
+  const [products, setProducts] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  // 2. Add the missing filters array right here!
+  const filters = ["All", "Woody", "Floral", "Citrus", "Oriental"];
+
+  // 3. The fetching logic
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const res = await fetch('/api/perfumes');
+        if (!res.ok) return; 
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Failed to fetch products", error);
+      }
+    }
+    loadProducts();
+  }, []);
+  // The logic to save the item to local storage
+  const handleAddToCart = (product) => {
+    // 1. Get the current cart from memory, or start an empty array if it doesn't exist
+    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // 2. Add the newly clicked perfume to the array
+    existingCart.push(product);
+    
+    // 3. Save the new array back into the browser's memory
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+    
+    // 4. Shout to the rest of the website that the cart has changed!
+    window.dispatchEvent(new Event('cartUpdated'));
+    
+    alert(`Added ${product.name} to your cart!`); // Optional feedback for you
+  };
+
+  // ... keep the rest of your UI code exactly the same!
 
   return (
+    // ... keep the rest of your beautiful UI and JSX exactly the same!
+    // The {products.map(...)} section will now work perfectly once the API is online.
     <div className="min-h-screen bg-[#050505] pt-32 px-8 md:px-16 pb-24">
       
       {/* Page Header */}
@@ -53,10 +91,13 @@ export default function ProductsPage() {
               
               {/* Quick Add to Cart Button (Appears on Hover) */}
               <div className="absolute inset-x-0 bottom-0 p-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                <button className="w-full bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 text-xs tracking-[0.2em] uppercase flex items-center justify-center gap-3 hover:bg-white hover:text-black transition-colors">
-                  <ShoppingBag size={16} />
-                  Add to Cart
-                </button>
+                <button 
+  onClick={() => handleAddToCart(product)} 
+  className="w-full bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 text-xs tracking-[0.2em] uppercase flex items-center justify-center gap-3 hover:bg-white hover:text-black transition-colors"
+>
+  <ShoppingBag size={16} />
+  Add to Cart
+</button>
               </div>
             </div>
 
