@@ -88,7 +88,7 @@ export default function AdminDashboard() {
           {/* Price & Category Row */}
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <label className="block text-[10px] text-gray-500 uppercase tracking-widest mb-2">Price ($)</label>
+              <label className="block text-[10px] text-gray-500 uppercase tracking-widest mb-2">Price (₹)</label>
               <input 
                 required type="number" name="price" value={formData.price} onChange={handleChange}
                 placeholder="250" 

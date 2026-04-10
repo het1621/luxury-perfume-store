@@ -111,7 +111,7 @@ export default function Home() {
       <section ref={heroSectionRef} className="h-screen flex items-center justify-center relative mt-[-96px] bg-transparent">
         <div className="z-10 text-center px-4 flex flex-col items-center pointer-events-none" ref={titleRef}>
           <h1 className="text-5xl md:text-8xl font-serif tracking-widest uppercase mb-6 drop-shadow-2xl">
-            Ethereal
+           Coco Noir
           </h1>
           <p className="text-sm md:text-base tracking-[0.3em] text-gray-300 uppercase mb-10 drop-shadow-md">
             The New Standard of Fragrance

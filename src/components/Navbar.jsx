@@ -154,7 +154,7 @@ export default function Navbar() {
                       <span className="text-xs">{item.quantity}</span>
                       <button onClick={() => handlePlus(item)} className="hover:text-[#d4af37] transition-colors"><Plus size={12} /></button>
                     </div>
-                    <p className="text-[#d4af37] tracking-[0.1em] text-sm">${item.price * item.quantity}</p>
+                    <p className="text-[#d4af37] tracking-[0.1em] text-sm">₹{(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 </div>
               </div>
@@ -165,7 +165,7 @@ export default function Navbar() {
         <div className="p-8 border-t border-white/5 bg-[#0a0a0a]">
           <div className="flex justify-between text-white text-sm tracking-widest uppercase mb-6">
             <span>Subtotal</span>
-            <span>${subtotal}</span>
+            <span>₹{subtotal.toFixed(2)}</span>
           </div>
           <p className="text-[10px] text-gray-500 text-center mb-6">Shipping & taxes calculated at checkout.</p>
           

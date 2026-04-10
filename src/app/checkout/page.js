@@ -98,7 +98,7 @@ export default function CheckoutPage() {
                     <div className="flex flex-col justify-center flex-1">
                       <h3 className="text-sm font-serif text-white uppercase tracking-wider mb-1">{item.name}</h3>
                       <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-2">{item.category}</p>
-                      <p className="text-[#d4af37] tracking-[0.1em] text-xs">${item.price}</p>
+                      <p className="text-[#d4af37] tracking-[0.1em] text-xs">₹{item.price}</p>
                     </div>
                   </div>
                 ))
@@ -108,7 +108,7 @@ export default function CheckoutPage() {
             <div className="space-y-4 text-xs tracking-widest uppercase border-t border-white/10 pt-6 mb-8">
               <div className="flex justify-between text-gray-400">
                 <span>Subtotal</span>
-                <span>${subtotal}</span>
+                <span>₹{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-400">
                 <span>Shipping</span>
@@ -116,7 +116,7 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between text-white text-sm pt-4 border-t border-white/10">
                 <span>Total</span>
-                <span className="text-[#d4af37]">${subtotal}</span>
+                <span className="text-[#d4af37]">₹{subtotal.toFixed(2)}</span>
               </div>
             </div>
 
