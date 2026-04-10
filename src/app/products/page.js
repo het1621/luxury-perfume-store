@@ -105,7 +105,7 @@ export default function ProductsPage() {
             <div className="flex flex-col items-center text-center">
               <p className="text-[9px] text-gray-500 uppercase tracking-widest mb-2">{product.category}</p>
               <h3 className="text-xl font-serif text-white uppercase tracking-wider mb-2">{product.name}</h3>
-              <p className="text-[#d4af37] tracking-[0.1em] text-sm">{product.price}</p>
+              <p className="text-[#d4af37] tracking-[0.1em] text-sm">₹{product.price}</p>
             </div>
             
           </div>
