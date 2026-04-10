@@ -2,12 +2,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; 
-import { Menu, ShoppingBag, Search, User, X, Minus, Plus } from 'lucide-react';
+// 1. Added Instagram to your imports here:
+import { Menu, ShoppingBag, Search, User, X, Minus, Plus, Instagram } from 'lucide-react';
 
 export default function Navbar() {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [user, setUser] = useState(null); // <-- 1. Memory for the logged-in user
+  const [user, setUser] = useState(null); 
   const router = useRouter();
 
   const handleCheckoutNavigation = (e) => {
@@ -17,23 +18,21 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    // Check Cart
     const updateCart = () => {
       const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
       setCartItems(savedCart);
     };
 
-    // 2. Check Auth Status
     const checkAuth = () => {
       const savedUser = JSON.parse(localStorage.getItem('user'));
       setUser(savedUser);
     };
 
     updateCart();
-    checkAuth(); // Run once when page loads
+    checkAuth(); 
 
     window.addEventListener('cartUpdated', updateCart);
-    window.addEventListener('authChange', checkAuth); // Listen for login events
+    window.addEventListener('authChange', checkAuth); 
 
     return () => {
       window.removeEventListener('cartUpdated', updateCart);
@@ -94,16 +93,24 @@ export default function Navbar() {
 
         <div className="flex items-center gap-6">
           
-          {/* 3. THE MAGIC LOCK: Only shows if the user role is exactly 'ADMIN' */}
           {user?.role === 'ADMIN' && (
             <Link href="/admin" className="text-[10px] tracking-widest uppercase text-[#d4af37] hover:text-white transition-colors hidden sm:block">
               Admin Panel
             </Link>
           )}
 
+          {/* 2. ADDED INSTAGRAM LINK HERE */}
+          <a 
+            href="https://www.instagram.com/thecoco.noir" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-white hover:text-[#d4af37] transition-colors"
+          >
+            <Instagram size={20} />
+          </a>
+
           <Link href="/login" className="text-white hover:text-[#d4af37] transition-colors flex items-center gap-2">
             <User size={20} />
-            {/* Bonus: Shows your name if you are logged in! */}
             {user && <span className="text-[10px] tracking-widest uppercase hidden sm:block">{user.name}</span>}
           </Link>
 
